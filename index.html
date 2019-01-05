@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <script src="/node_modules/mqtt/dist/mqtt.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  </head>
+  <body>
+   
+
+<div class="card">
+        <h5 class="card-header">Go For Spaceship</h5>
+        <div class="card-body">
+          <h5 class="card-title">Click on publish button to publish messasge on {presence} topic</h5>
+          <p class="card-text">Please change your iot device code to subscribe/piblish to the same topic {presence}.</p>
+          <div class="list-group" id="message-list">
+                <a href="#" class="list-group-item list-group-item-action active">
+                  Listening to {presence} topic
+                </a>
+              
+              </div>
+            <div style="height:50px"></div>
+          <input type="text" name="input" id="messageInput" value="Salam Jahan!">
+          <a href="javascript:publish()" class="btn btn-primary">Publish</a>
+        </div>
+      </div>
+      <script>
+            var client = mqtt.connect('ws://test-mqtt2.herokuapp.com');
+            client.subscribe("presence");
+            var messageListDoc = document.getElementById('message-list')
+            client.on("message", function(topic, payload) {
+                var messageDoc = document.createElement('a')
+                messageDoc.classList.add('list-group-item', 'list-group-item-action')
+                messageDoc.innerText = [topic, payload].join(": ")
+              messageListDoc.appendChild(messageDoc)
+            });
+            
+            function publish() {
+                client.publish("presence", document.getElementById('messageInput').value);
+                
+            }
+          </script>
+  </body>
+</html>
